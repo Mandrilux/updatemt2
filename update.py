@@ -1,7 +1,7 @@
 import os
 import urllib.request, json
 import sys
-from PySide2.QtWidgets import QApplication, QLabel, QProgressBar, QWidget, QTextEdit
+from PySide2.QtWidgets import QApplication, QLabel, QProgressBar, QWidget, QTextEdit, QPushButton
 from PySide2 import *
 from time import sleep
 
@@ -24,7 +24,7 @@ def getDataDiff():
 
 def downloadfile(file, progressBar, pourcent, textarea):
     oldText = textarea.toPlainText()
-    print('http://update.sevenonline.fr/' +  file[0])
+    #print('http://update.sevenonline.fr/' +  file[0])
     url = 'http://update.sevenonline.fr/' + file[0]
     path = "./"
     dir = file[0].split("/")
@@ -32,15 +32,11 @@ def downloadfile(file, progressBar, pourcent, textarea):
     for pathcut in dir:
         path = path + pathcut + "/"
     if os.path.isdir(path) == False:
-        #textarea.setPlainText(oldText + "[+] Création du dossier " + path )
-        #print ("[+] Path " + path + " OK")
-#    else:
         textarea.setPlainText(oldText + "[+] Création du dossier " + path + "\n" )
         os.makedirs(path)
     oldText = textarea.toPlainText()
     try:
         urllib.request.urlretrieve(url, './' + file[0])
-
         add = progressBar.value() + pourcent
         if progressBar.value() + pourcent >= 100:
             add = 100
@@ -48,7 +44,11 @@ def downloadfile(file, progressBar, pourcent, textarea):
         textarea.setPlainText(oldText + "[+] Décompression du fichier " + file[0] + "\n")
 
     except FileNotFoundError:
-        print ("[-] Erreur lors de la copie du fichier")
+        textarea.setPlainText(oldText + "[+] Erreur lors de la décompression du fichier " + file[0] + "\n")
+
+def start():
+    os.startfile("SevenOnline.exe")
+    sys.exit(0)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -64,25 +64,32 @@ if __name__ == "__main__":
     textarea.move(20,50)
     textarea.setMinimumSize(400,100)
     textarea.setReadOnly(1)
+    btnStart = QPushButton('Lancer le jeu',windows)
+    btnStart.setVisible(False)
+    btnStart.move(20,260)
+    btnStart.connect(btnStart, QtCore.SIGNAL('clicked()'), start)
     windows.show()
-    sleep(0.05)
-    print("Update Sevenonline")
+    #sleep(1)
+    #print("Update Sevenonline")
     files = getFile("./")
     files = updateSizePython(files)
+    textarea.setPlainText("[+] Téléchargement de l'index \n")
     dataremote = getDataDiff()
     diff = lambda l1,l2: [x for x in l1 if x not in l2]
 
     #à DL = diff(dataremote,files)
     #a remove = diff(files, dataremote)
     download = diff(dataremote,files)
-    #print(download)
-    
+
+
     nbDownload = len(download)
     if nbDownload == 0:
-        textarea.setPlainText("[+] Rien à télécharger")
+        oldText = textarea.toPlainText()
+        textarea.setPlainText( oldText + "[+] Sevenonline est à jour \n")
         progressBar.setProperty("value", 100)
     else:
         for i in range(len(download)):
-            print (download[i])
+            #print (download[i])
             downloadfile(download[i], progressBar, round(100 / nbDownload), textarea)
+    btnStart.setVisible(True)
     sys.exit(app.exec_())
