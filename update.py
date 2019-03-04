@@ -37,7 +37,7 @@ def downloadfile(file, progressBar, pourcent, textarea):
     oldText = textarea.toPlainText()
     try:
         urllib.request.urlretrieve(url, './' + file[0])
-        add = progressBar.value() + pourcent
+        add = progressBar.va + pourcent
         if progressBar.value() + pourcent >= 100:
             add = 100
         progressBar.setProperty("value", add)
@@ -50,25 +50,7 @@ def start():
     os.startfile("SevenOnline.exe")
     sys.exit(0)
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    windows = QWidget()
-    windows.setFixedSize(450, 400)
-    progressBar = QProgressBar(windows)
-    progressBar.setGeometry(20, 10, 400, 23)
-    progressBar.setProperty("value", 0)
-    progressBar.setTextVisible(False)
-    progressBar.setObjectName("progressBar")
-    windows.setWindowTitle("Update SevenOnline")
-    textarea = QTextEdit(windows)
-    textarea.move(20,50)
-    textarea.setMinimumSize(400,100)
-    textarea.setReadOnly(1)
-    btnStart = QPushButton('Lancer le jeu',windows)
-    btnStart.setVisible(False)
-    btnStart.move(20,260)
-    btnStart.connect(btnStart, QtCore.SIGNAL('clicked()'), start)
-    windows.show()
+def runUpdate():
     #sleep(1)
     #print("Update Sevenonline")
     files = getFile("./")
@@ -92,4 +74,27 @@ if __name__ == "__main__":
             #print (download[i])
             downloadfile(download[i], progressBar, round(100 / nbDownload), textarea)
     btnStart.setVisible(True)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    windows = QWidget()
+    windows.setFixedSize(450, 400)
+    progressBar = QProgressBar(windows)
+    progressBar.setGeometry(20, 10, 400, 23)
+    progressBar.setProperty("value", 0)
+    progressBar.setTextVisible(False)
+    progressBar.setObjectName("progressBar")
+    windows.setWindowTitle("Update SevenOnline")
+    textarea = QTextEdit(windows)
+    textarea.move(20,50)
+    textarea.setMinimumSize(400,100)
+    textarea.setReadOnly(1)
+    btnStart = QPushButton('Lancer le jeu',windows)
+    btnStart.setVisible(False)
+    btnStart.move(20,260)
+    btnStart.connect(btnStart, QtCore.SIGNAL('clicked()'), start)
+    windows.show()
+
+
+    QtCore.QTimer.singleShot(1000, runUpdate)
     sys.exit(app.exec_())
