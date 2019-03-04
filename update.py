@@ -35,7 +35,7 @@ def downloadfile(file, progressBar, pourcent, textarea):
         #textarea.setPlainText(oldText + "[+] Création du dossier " + path )
         #print ("[+] Path " + path + " OK")
 #    else:
-        textarea.setPlainText(oldText + "[+] Création du dossier " + path )
+        textarea.setPlainText(oldText + "[+] Création du dossier " + path + "\n" )
         os.makedirs(path)
     oldText = textarea.toPlainText()
     try:
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     #a remove = diff(files, dataremote)
     download = diff(dataremote,files)
     #print(download)
-
+    
     nbDownload = len(download)
     if nbDownload == 0:
         textarea.setPlainText("[+] Rien à télécharger")
