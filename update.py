@@ -1,7 +1,8 @@
 import os
 import urllib.request, json
 import sys
-from PySide2.QtWidgets import QApplication, QLabel
+from PySide2.QtWidgets import QApplication, QLabel, QProgressBar, QWidget
+from PySide2 import QtCore, QtGui
 def getFile(path):
     return  [os.path.join(r,file) for r,d,f in os.walk(path) for file in f]
 
@@ -39,8 +40,17 @@ def downloadfile(file):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    label = QLabel("Hello World")
-    label.show()
+    windows = QWidget()
+    windows.show()
+    windows.setWindowTitle("Update SevenOnline")
+    progressBar = QProgressBar()
+    progressBar.setProperty("value", 24)
+    progressBar.setObjectName("progressBar")
+    progressBar.setGeometry(QtCore.QRect(20, 10, 361, 23))
+    #label = QLabel("Hello World")
+    #bar = QProgressBar()
+    #label.show()
+    #bar.show()
 
     print("Update Sevenonline")
     files = getFile("./")
